@@ -1,20 +1,19 @@
 #include "memlib.h"
-#include <Windows.h>
-#include <iostream>
+#include "includes.h"
 #include <thread>
-void main_thread() {
-	auto addr = static_cast<std::uintptr_t>(0xC73EF);
-	std::vector<unsigned char> bytes = { 0xFF, 0x00 };
-	memorypatch_lib memlib;
-	memorypatch_lib::create_console();
+void main_thread(HMODULE mod_handle, const std::string& dll_name) {
+	auto addr = 0xC73EF;
+	std::array<std::uint8_t, 2> bytes = {0xFF, 0x00};
+	memorypatch_lib memlib(mod_handle, dll_name);
 	memlib.deflat(addr);
-	memlib.set_bytes(2, bytes);
+	memlib.mem_set_bytes(2, bytes);
+	memlib.unload();
 }
 
-bool __stdcall DllMain(HMODULE, DWORD reason, void*)
+bool __stdcall DllMain(HMODULE mod_handle, DWORD reason, void*)
 {
 	if (reason == DLL_PROCESS_ATTACH) {
-		std::thread(main_thread).detach();
+		std::thread(main_thread, mod_handle, "xenon").detach();
 	}
-	return 1;
+	return true;
 }
