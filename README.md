@@ -1,5 +1,5 @@
 # memory-manip-lib
-A very basic and minimal memory manipulation/editing library, with example use for Assault Cube
+A very basic and minimal memory manipulation/editing library
 # Future updates
 I may update this repository in the case of: adding functions, cleaning code, optimizing code
 # Latest update (21/05/2022)
