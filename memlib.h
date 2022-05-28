@@ -32,7 +32,7 @@ bool mem_manip_lib::mem_set_bytes(const std::size_t& instr_size, const std::arra
 	}
 	mem_manip_lib::mem_set_nop(instr_size);
 	std::memcpy(this->mem_address, byte_arr.data(), byte_arr.size());
-	std::printf("set %u user-provided bytes to address 0x%p\nuser-provided bytes: %X", byte_arr.size(), this->mem_address, byte_arr);
+	std::printf("set %u user-provided bytes to address 0x%p\nuser-provided bytes: %X\n", byte_arr.size(), this->mem_address, byte_arr);
 	std::cout << "\n";
 	mem_manip_lib::unset_rwx(instr_size);
 	return true;
