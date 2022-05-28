@@ -1,11 +1,15 @@
 # memory-manip-lib
-A very basic and minimal memory manipulation/editing library
-# Future updates
-I may update this repository in the case of: adding functions, cleaning code, optimizing code
-# Latest update (21/05/2022)
-- Added user provided names for your project (will appear in console)
-- Added set rwx (set page_execute_readwrite) and unset_rwx to prevent setting and unsetting page permissions constantly.
-- Added DLL unloading. Allows developers to inject and "uninject" their dlls when developing.
-- Added set value. Allows you to set values of memory addresses.
-- Added free console and integrated create console into memorypatch_lib (soon to be mem_manip_lib) constructor.
-- Changed std::vector use in mem_set_bytes to std::array (thank you 0x90 and iivillian)
+very basic and minimal memory manipulation/editing library
+# Current features (28/05/2022)
+- rebase_address
+- set_rwx (set page_execute_readwrite permissions)
+- unset_rwx
+- mem_set_nop (set the bytes of a memory address to 0x90 / nop)
+- mem_set_bytes (set the bytes of a memory address to the bytes of a user-provided std::array (uint8_t)
+## misc: 
+- creates dll console on class construction
+- free_console
+- unload (unloads the dll, useful for debugging mid-development)
+# purpose / objective
+the purpose of this library is to make it easier for developers to partake in their developing of dlls which manipulate or edit memory without doing the grunt work.
+if you have any suggestions contact alephnull#6435 (developer of this library)
