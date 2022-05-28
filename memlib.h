@@ -15,7 +15,7 @@ public:
 	void set_rwx(const std::size_t& num_bytes);
 	void unset_rwx(const std::size_t& num_bytes);
 	void mem_set_nop(const std::size_t& num_bytes);
-	bool mem_tramp_hook(const std::size_t& num_bytes, const void*& func_addr, const void*& hook_address);
+	// bool mem_tramp_hook(const std::size_t& num_bytes, const void*& func_addr, const void*& hook_address);
 	template<std::size_t sz>
 	bool mem_set_bytes(const std::size_t& num_bytes, const std::array<std::uint8_t, sz>& byte_arr);
 	explicit mem_manip_lib(HMODULE hmod, const std::string& dll_name) : dllname(dll_name), mod_handle(hmod) {
