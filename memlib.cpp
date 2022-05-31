@@ -51,12 +51,13 @@ void mem_manip_lib::mem_set_nop(const std::size_t sz) {
 	std::memset(this->mem_address, 0x90, sz);
 	std::printf("set %u bytes to 0x90 at address: 0x%p\n", sz, this->mem_address);
 }
-bool mem_manip_lib::mem_tramp_hook(const std::size_t sz, const std::uint32_t func_address, const std::uint32_t hook_address) {
+bool mem_manip_lib::mem_tramp_hook(const std::size_t sz, const std::uint32_t func_address, const std::uint32_t hook_address, std::uint32_t* jmp_back_address) {
 	std::cout << "trampoline hook function called, attempting a trampoline hook.\n";
 	if (sz < 5) {
 		std::printf("number of bytes too small for trampoline hook. number of bytes given: %u\n", sz);
 		return false;
 	}
+	*jmp_back_address = hook_address + sz;
 	this->mem_address = reinterpret_cast<void*>(hook_address);
 	auto rel_address = (func_address - hook_address) - 5;
 	std::array<std::uint8_t, 5> tramp_hook_bytes = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
