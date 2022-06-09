@@ -15,10 +15,10 @@ public:
     void unload();
 
     template < typename...var_arg >
-    constexpr void dbg_log( std::string dbg_message , var_arg...fmt_args ) const;
+    void dbg_log( std::string dbg_message , var_arg...fmt_args ) const;
 
     template < typename... var_arg >
-    constexpr void dbg_err( std::string dbg_error , var_arg...fmt_args ) const;
+    void dbg_err( std::string dbg_error , var_arg...fmt_args ) const;
 
     template < typename stl_container_t >
     stl_container_t mem_read_bytes() const;
@@ -62,7 +62,7 @@ stl_container_t mem_manip_lib::mem_read_bytes() const {
 
 
 template < typename... var_arg >
-constexpr void mem_manip_lib::dbg_log( std::string dbg_message , var_arg...fmt_args ) const {
+void mem_manip_lib::dbg_log( std::string dbg_message , var_arg...fmt_args ) const {
     std::string dbg_err_prefix = "[+] ";
     std::printf( (dbg_err_prefix + dbg_message).c_str() , fmt_args... );
     std::cout << "\n";
@@ -70,7 +70,7 @@ constexpr void mem_manip_lib::dbg_log( std::string dbg_message , var_arg...fmt_a
 
 
 template < typename... var_arg >
-constexpr void mem_manip_lib::dbg_err( std::string dbg_message , var_arg...fmt_args ) const {
+void mem_manip_lib::dbg_err( std::string dbg_message , var_arg...fmt_args ) const {
     std::string dbg_err_prefix = "[!] ";
     std::printf( (dbg_err_prefix + dbg_message).c_str() , fmt_args...);
     std::cout << "\n";
