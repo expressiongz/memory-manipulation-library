@@ -32,15 +32,13 @@ bool mem_manip_lib::alloc_console()
 
 bool mem_manip_lib::free_console()
 {
-    if ( this->console_attached )
-    {
-        dbg_log( "free'd the console from the process" );
-        FreeConsole();
-        this->console_attached = false;
-        return true;
-    }
+    if (!this->console_attached) return false;
+      
+    dbg_log( "free'd the console from the process" );
+    FreeConsole();
+    this->console_attached = false;  
 
-    return false;
+    return true;
 }
 
 
