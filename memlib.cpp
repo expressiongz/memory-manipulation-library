@@ -30,7 +30,7 @@ bool mem_manip_lib::alloc_console()
 }
 
 
-constexpr bool mem_manip_lib::free_console()
+bool mem_manip_lib::free_console()
 {
     if ( this->console_attached )
     {
