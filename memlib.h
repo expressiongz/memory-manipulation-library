@@ -15,16 +15,16 @@ public:
     void unload();
 
     template < typename...var_arg >
-    void dbg_log( std::string dbg_message , var_arg...fmt_args ) const;
+    void dbg_log( std::string const& dbg_message , var_arg...fmt_args ) const;
 
     template < typename... var_arg >
-    void dbg_err( std::string dbg_error , var_arg...fmt_args ) const;
+    void dbg_err( std::string const& dbg_error , var_arg...fmt_args ) const;
 
     template < typename stl_container_t >
     stl_container_t mem_read_bytes() const;
 
     bool alloc_console();
-    constexpr bool free_console();
+    bool free_console();
 
     void reloc_rva( const std::uint32_t mem_address );
     void set_rwx( const std::size_t sz );
@@ -60,9 +60,8 @@ stl_container_t mem_manip_lib::mem_read_bytes() const {
     return bytes_read;
 }
 
-
 template < typename... var_arg >
-void mem_manip_lib::dbg_log( std::string dbg_message , var_arg...fmt_args ) const {
+void mem_manip_lib::dbg_log( std::string const& dbg_message , var_arg...fmt_args ) const {
     std::string dbg_err_prefix = "[+] ";
     std::printf( (dbg_err_prefix + dbg_message).c_str() , fmt_args... );
     std::cout << "\n";
@@ -70,7 +69,7 @@ void mem_manip_lib::dbg_log( std::string dbg_message , var_arg...fmt_args ) cons
 
 
 template < typename... var_arg >
-void mem_manip_lib::dbg_err( std::string dbg_message , var_arg...fmt_args ) const {
+void mem_manip_lib::dbg_err( std::string const& dbg_message , var_arg...fmt_args ) const {
     std::string dbg_err_prefix = "[!] ";
     std::printf( (dbg_err_prefix + dbg_message).c_str() , fmt_args...);
     std::cout << "\n";
