@@ -15,9 +15,9 @@ small memory manipulation library
 - dbg_log (custom debug print function)
 - dbg_err (custom debug print function, used for logging errors)
 
-# fixes (09/05/2022)
-- accidentally used dbg_err in a few functions
+# fixes (11/05/2022)
 - improved the code in general.
+- optimized some stuff
 
 # purpose / objective
 the purpose of this library is to make it easier for developers to partake in their developing of dlls which manipulate or edit memory without doing the grunt work.
