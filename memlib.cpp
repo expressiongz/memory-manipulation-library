@@ -1,5 +1,4 @@
 #include "memlib.h"
-#include "includes.h"
 
 
 void mem_manip_lib::unload()
@@ -46,8 +45,8 @@ bool mem_manip_lib::free_console()
 
 void mem_manip_lib::reloc_rva( const std::uint32_t address )
 {
-    static auto base = reinterpret_cast < std::uint32_t > ( GetModuleHandleA(nullptr) );
-    this->mem_address = reinterpret_cast < void* > (base + address);
+    static auto base = reinterpret_cast< std::uint32_t >( GetModuleHandleA(nullptr) );
+    this->mem_address = reinterpret_cast< void* >(base + address);
 }
 
 
@@ -77,7 +76,7 @@ void mem_manip_lib::mem_set_nop( const std::size_t sz )
 
 }
 
-bool mem_manip_lib::mem_set_bytes( const std::size_t instr_sz , std::span < const std::uint8_t > byte_arr )
+bool mem_manip_lib::mem_set_bytes( const std::size_t instr_sz , std::span< const std::uint8_t > byte_arr )
 {
     dbg_log( "byte patch function called, attempting to patch bytes." );
 
@@ -108,14 +107,14 @@ bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t f
     }
 
     *p_jmp_back = hook_address + sz;
-    this->mem_address = reinterpret_cast < void* > ( hook_address );
+    this->mem_address = reinterpret_cast< void* >( hook_address );
 
     auto rel_address = ( func_address - hook_address ) - 5;
-    auto tramp_hook_bytes = std::to_array<std::uint8_t>(
+    auto tramp_hook_bytes = std::to_array< std::uint8_t >(
         { 0xE9, 0x00, 0x00, 0x00, 0x00 }
     );
 
-    *( reinterpret_cast < std::uint32_t* > ( &tramp_hook_bytes[1] ) ) = rel_address;
+    *( reinterpret_cast< std::uint32_t* >( &tramp_hook_bytes[1] ) ) = rel_address;
 
     if ( mem_set_bytes( sz, tramp_hook_bytes ) )
     {
@@ -125,4 +124,15 @@ bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t f
 
     dbg_err( "failed to create trampoline hook. amount of bytes is not enough." );
     return false;
+}
+
+std::vector< std::uint8_t > mem_manip_lib::mem_read_function_bytes( void const* func_addr ) const {
+    auto bytes_read = std::vector< std::uint8_t >();
+    auto const* curr_byte = reinterpret_cast< std::uint8_t const* >( func_addr );
+    do {
+        bytes_read.push_back( *curr_byte );
+        curr_byte += 1;
+
+    } while (*( curr_byte + 1 ) != 0xCC || *( curr_byte + 2 ) != 0xCC || *( curr_byte + 3 ) != 0xCC);
+    return bytes_read;
 }

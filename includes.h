@@ -3,3 +3,4 @@
 #include <Windows.h>
 #include <array>
 #include <span>
+#include <vector>
