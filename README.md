@@ -4,7 +4,7 @@ small memory manipulation library
 - reloc_rva:
 relocates relative virtual address according to the image base address
 - set_rwx: 
-set page_execute_readwrite permissions
+set page_execute_readwrite permissions at this->mem_address
 - unset_rwx:
 self explanatory
 - mem_set_nop:
@@ -16,7 +16,7 @@ creates a trampoline hook, the hook address should be a virtual address, and so 
 - mem_read_bytes: 
 reads x amount of bytes at this->mem_address
 -  mem_ret_func_bytes:
-returns a std::vector of a functions bytes
+returns a std::vector of a functions bytes after reading them
 # misc features (09/06/2022)
 - unload:
 unloads the dll
