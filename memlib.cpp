@@ -126,9 +126,9 @@ bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t f
     return false;
 }
 
-std::vector< std::uint8_t > mem_manip_lib::mem_read_function_bytes( void const* func_addr ) const {
+std::vector< std::uint8_t > mem_manip_lib::mem_read_function_bytes() const {
     auto bytes_read = std::vector< std::uint8_t >();
-    auto const* curr_byte = reinterpret_cast< std::uint8_t const* >( func_addr );
+    auto const* curr_byte = reinterpret_cast< std::uint8_t const* >( this->mem_address );
     do {
         bytes_read.push_back( *curr_byte );
         curr_byte += 1;
