@@ -23,7 +23,7 @@ public:
     template< typename stl_container_t >
     stl_container_t mem_read_bytes() const;
 
-    std::vector< std::uint8_t > mem_read_function_bytes() const;
+    std::vector< std::uint8_t > mem_ret_func_bytes() const;
 
     bool alloc_console() ;
     bool free_console();
@@ -36,7 +36,7 @@ public:
 
 
     bool mem_set_bytes( const std::size_t szbyte, std::span< const std::uint8_t > byte_arr ) ;
-    bool mem_tramp_hook( const std::size_t sz , const std::uint32_t func_addr , const std::uint32_t hook_address , std::uint32_t* jmp_back_address );
+    bool mem_tramp_hook( const std::size_t sz , const std::uint32_t func_addr, std::uint32_t* jmp_back_address );
 
     explicit mem_manip_lib( HMODULE hmod , const std::string_view dll_name , bool alloc_console_f = false) : dllname(dll_name), mod_handle(hmod) {
         if (alloc_console_f) {

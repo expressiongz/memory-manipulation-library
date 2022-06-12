@@ -96,7 +96,7 @@ bool mem_manip_lib::mem_set_bytes( const std::size_t instr_sz , std::span< const
     return true;
 }
 
-bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t func_address , const std::uint32_t hook_address , std::uint32_t* p_jmp_back )
+bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t func_address, std::uint32_t* p_jmp_back )
 {
     dbg_log( "trampoline hook function called, attempting a trampoline hook." );
 
@@ -106,10 +106,9 @@ bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t f
         return false;
     }
 
-    *p_jmp_back = hook_address + sz;
-    this->mem_address = reinterpret_cast< void* >( hook_address );
+    *p_jmp_back = reinterpret_cast<std::uint32_t>( this->mem_address ) + sz;
 
-    auto rel_address = ( func_address - hook_address ) - 5;
+    auto rel_address = ( func_address - reinterpret_cast< std::uint32_t >(this->mem_address) ) - 5;
     auto tramp_hook_bytes = std::to_array< std::uint8_t >(
         { 0xE9, 0x00, 0x00, 0x00, 0x00 }
     );
@@ -126,7 +125,7 @@ bool mem_manip_lib::mem_tramp_hook( const std::size_t sz , const std::uint32_t f
     return false;
 }
 
-std::vector< std::uint8_t > mem_manip_lib::mem_read_function_bytes() const {
+std::vector< std::uint8_t > mem_manip_lib::mem_ret_func_bytes(  ) const {
     auto bytes_read = std::vector< std::uint8_t >();
     auto const* curr_byte = reinterpret_cast< std::uint8_t const* >( this->mem_address );
     do {
