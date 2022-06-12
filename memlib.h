@@ -23,7 +23,7 @@ public:
     template< typename stl_container_t >
     stl_container_t mem_read_bytes() const;
 
-    std::vector< std::uint8_t > mem_read_function_bytes( const void* func_addr ) const;
+    std::vector< std::uint8_t > mem_read_function_bytes() const;
 
     bool alloc_console() ;
     bool free_console();
