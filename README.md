@@ -8,15 +8,15 @@ set page_execute_readwrite permissions
 - unset_rwx:
 self explanatory
 - mem_set_nop:
-sets the x amount bytes starting at a user-provided base address to nop (0x90)
+sets the x amount bytes at this->mem_address to nop (0x90)
 - mem_set_bytes:
-sets x amount of bytes from user-provided stl container to address given by the user and set by reloc_rva ( container should store byte-size data types i.e std::uint8_t)
+sets x amount of bytes from user-provided stl container at this->mem_address ( container should store byte-size data types i.e std::uint8_t)
 - mem_tramp_hook: 
 creates a trampoline hook, the hook address should be a virtual address, and so should be your hook function address.
 - mem_read_bytes: 
-reads x amount of bytes at a base memory address provided by the user.
+reads x amount of bytes at this->mem_address
 -  mem_ret_func_bytes:
-returns a std::vector of a functions bytes, function end is determined by checking for alignment bytes
+returns a std::vector of a functions bytes
 # misc features (09/06/2022)
 - unload:
 unloads the dll
