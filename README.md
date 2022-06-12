@@ -9,7 +9,7 @@ set page_execute_readwrite permissions
 self explanatory
 - mem_set_nop:
 sets the x amount bytes starting at a user-provided base address to nop (0x90)
-- mem_set_bytes: 
+- mem_set_bytes: \n 
 sets x amount of bytes from user-provided stl container to address given by the user and set by reloc_rva ( container should store byte-size data types i.e std::uint8_t)
 - mem_tramp_hook: 
 creates a trampoline hook, the hook address should be a virtual address, and so should be your hook function address.
