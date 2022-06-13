@@ -36,7 +36,7 @@ public:
 
 
     bool mem_set_bytes( const std::size_t szbyte, std::span< const std::uint8_t > byte_arr ) ;
-    bool mem_tramp_hook( const std::size_t sz , const std::uint32_t func_addr, std::uint32_t* jmp_back_address );
+    std::uint32_t mem_tramp_hook( const std::uint32_t func_addr, const std::uint32_t instr_sz );
 
     explicit mem_manip_lib( HMODULE hmod , const std::string_view dll_name , bool alloc_console_f = false) : dllname(dll_name), mod_handle(hmod) {
         if (alloc_console_f) {
@@ -52,13 +52,11 @@ public:
 template< typename stl_container_t >
 stl_container_t mem_manip_lib::mem_read_bytes() const {
     auto bytes_read = stl_container_t();
-    dbg_log( "read bytes function called, reading %u bytes at virtual address 0x%p." , bytes_read.size(), this->mem_address);
 
     for ( auto k = 0u; k < bytes_read.size(); ++k ) {
         bytes_read[k] = ( * ( reinterpret_cast< std::uint8_t* >( reinterpret_cast< std::uint32_t >( this->mem_address ) + k) ) );
     }
 
-    dbg_log( "finished reading %u bytes at virtual address 0x%p" , bytes_read.size(), this->mem_address);
     return bytes_read;
 }
 
