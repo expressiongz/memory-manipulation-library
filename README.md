@@ -1,8 +1,16 @@
 # memory-manip-lib
 small memory manipulation library
-# current memory features (30/06/2022)
-```
-  template< typename stl_container_t >
+# current features (30/06/2022)
+```cpp
+    void unload();
+
+    template< typename...var_arg >
+    void dbg_log( std::string const& dbg_message , var_arg...fmt_args ) const;
+
+    template< typename... var_arg >
+    void dbg_err( std::string const& dbg_error , var_arg...fmt_args ) const;
+
+    template< typename stl_container_t >
     stl_container_t mem_read_bytes() const;
 
     template<typename int_t>
@@ -13,6 +21,9 @@ small memory manipulation library
     std::string mem_read_string(const std::uint32_t string_sz) const;
 
     std::vector< std::uint8_t > mem_read_func_bytes() const;
+
+    bool alloc_console();
+    bool free_console();
 
     void reloc_rva( const std::uint32_t mem_address );
     void set_va(const std::uint32_t mem_address);
@@ -27,18 +38,6 @@ small memory manipulation library
     bool mem_set_bytes( const std::size_t szbyte, std::uint8_t byte );
     
     std::uint32_t mem_tramp_hook( const std::uint32_t func_addr, const std::uint32_t instr_sz );
-```
-# misc features (09/06/2022)
-```
-    bool alloc_console();
-    bool free_console();
-    void unload();
-
-    template< typename...var_arg >
-    void dbg_log( std::string const& dbg_message , var_arg...fmt_args ) const;
-
-    template< typename... var_arg >
-    void dbg_err( std::string const& dbg_error , var_arg...fmt_args ) const;
 ```
 
 # fixes (11/05/2022)
