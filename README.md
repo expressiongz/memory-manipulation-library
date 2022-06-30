@@ -1,37 +1,49 @@
 # memory-manip-lib
 small memory manipulation library
-# current memory features (12/05/2022)
-- reloc_rva:
-relocates relative virtual address according to the image base address
-- set_rwx: 
-set page_execute_readwrite permissions at this->mem_address
-- unset_rwx:
-self explanatory
-- mem_set_nop:
-sets the x amount bytes at this->mem_address to nop (0x90)
-- mem_set_bytes:
-sets x amount of bytes from user-provided stl container at this->mem_address ( container should store byte-size data types i.e std::uint8_t)
-- mem_tramp_hook: 
-creates a trampoline hook, the hook address should be a virtual address, and so should be your hook function address.
-- mem_read_bytes: 
-reads x amount of bytes at this->mem_address
--  mem_ret_func_bytes:
-returns a std::vector of a functions bytes after reading them
+# current memory features (30/06/2022)
+```
+  template< typename stl_container_t >
+    stl_container_t mem_read_bytes() const;
+
+    template<typename int_t>
+    int_t mem_read_int(bool signedness) const;
+
+    std::uint8_t mem_read_byte(bool signednesss) const;
+
+    std::string mem_read_string(const std::uint32_t string_sz) const;
+
+    std::vector< std::uint8_t > mem_read_func_bytes() const;
+
+    void reloc_rva( const std::uint32_t mem_address );
+    void set_va(const std::uint32_t mem_address);
+
+    void set_rwx( const std::size_t sz );
+    void unset_rwx( const std::size_t sz );
+
+    void mem_set_nop( const std::size_t sz );
+
+
+    bool mem_set_bytes( const std::size_t szbyte, std::span< std::uint8_t > byte_arr );
+    bool mem_set_bytes( const std::size_t szbyte, std::uint8_t byte );
+    
+    std::uint32_t mem_tramp_hook( const std::uint32_t func_addr, const std::uint32_t instr_sz );
+```
 # misc features (09/06/2022)
-- unload:
-unloads the dll
-- create_console:
-self explanatory
-- free_console: 
-self explanatory
-- dbg_log: 
-custom debug print function
-- dbg_err: 
-custom debug print function, used for logging errors:
+```
+    bool alloc_console();
+    bool free_console();
+    void unload();
+
+    template< typename...var_arg >
+    void dbg_log( std::string const& dbg_message , var_arg...fmt_args ) const;
+
+    template< typename... var_arg >
+    void dbg_err( std::string const& dbg_error , var_arg...fmt_args ) const;
+```
 
 # fixes (11/05/2022)
-- improved the code in general.
-- optimized some stuff
+- major improvements
+- fixed some debug logging bugs.
 
 # purpose / objective
 this purpose is a part of my journey towards mastering C++ and also towards reverse engineering. It's also a contribution towards anybody who needs a small and simple memory editing library with no hassles.
