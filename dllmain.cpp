@@ -1,12 +1,11 @@
-#include "memlib.h"
+#include "mem_manip.h"
 #include "includes.h"
 #include <thread>
 
-void main_thread( HMODULE mod_handle , const std::string_view dll_name ) {
-	mem_manip_lib memlib( mod_handle , dll_name );
-	memlib.set_va(0xE02128);
-	std::cout << memlib.mem_read_string(5);
-	memlib.unload();
+void main_thread( HMODULE mod_handle , const std::string_view dll_name ) 
+{
+	mem_manip_lib memory_lib(mod_handle, dll_name);
+	memory_lib.unload();
 }
 
 bool __stdcall DllMain( HMODULE mod_handle , std::uint32_t reason , void* )
