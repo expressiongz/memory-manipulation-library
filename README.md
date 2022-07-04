@@ -50,9 +50,7 @@ small memory manipulation library
 
 ```
 
-# update (2/05/2022)
-- removed mem_read_int and replaced with mem_read_val
-- added get_va and get_rva
-
-# purpose / objective
-this purpose is a part of my journey towards mastering C++ and also towards reverse engineering. It's also a contribution towards anybody who needs a small and simple memory editing library with no hassles.
+# update (4/05/2022)
+- added mem_read_dyn
+allows reading multiple values of data_t consecutively. in the future will overload to allow runtime-calculated sizes.
+- fixed formatting
