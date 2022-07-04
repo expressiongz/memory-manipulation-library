@@ -1,6 +1,6 @@
 # memory-manip-lib
 small memory manipulation library
-# current features (2/06/2022)
+# current features (4/06/2022)
 ```cpp
     void unload();
 
