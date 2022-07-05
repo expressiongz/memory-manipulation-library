@@ -19,7 +19,6 @@ private:
     DWORD old_prot{ 0 };
 
 public:
-    void unload();
 
     template<typename...var_arg>
     void dbg_log(std::string const& dbg_message, var_arg...fmt_args) const;
@@ -64,6 +63,8 @@ public:
 
     bool mem_set_bytes(const std::size_t szbyte, std::span<std::uint8_t> byte_arr);
     bool mem_set_bytes(const std::size_t szbyte, std::uint8_t byte);
+
+    void unload();
 
     explicit mem_manip_lib(HMODULE hmod, const std::string_view dll_name, bool alloc_console_f = false) 
         : dllname(dll_name), mod_handle(hmod) 
