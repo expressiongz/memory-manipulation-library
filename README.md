@@ -63,15 +63,6 @@ small memory manipulation library
 	data_t* ret_data_address() const;
 ```
 
-# TL:DR
-
-Currently as of 06/07/2022 at 2:57 AM the library has code overwriting (mem_set_nop, mem_set_bytes, mem_set_byte, mem_tramp_hook) with a VirtualProtect wrapper function for ease of use. The code overwriting also comes with a library for restoring and overwriting code without making multiple calls to set virtual and relative addresses in order to overwrite code (currently only implemented for mem_tramp_hook, will be implemented in all other code overwriting functions within 24h ). 
-
-The library also has a data overwrite function mem_set_val, soon to be renamed to mem_set_data. This also comes with its own restoration class for overwriting and restoring data at the same memory location easily.
-
-The library has multiple data reading functions: mem_read_dyn (reads data consecutively, i.e very useful for reading arrays), mem_read_val (reads data. e.g health or ammo ), mem_read_func_bytes (starts reading at a certain base address provided by the user until it encounters alignment bytes, extremely useful if you need to copy the bytecode of a function), mem_read_string (can be replaced with mem_read_dyn but specifically returns a std::string).
-
-There are a few redundancies in the code that I am aware of, simply do not have the time to fix them as of right now. 
 
 # update (6/07/2022)
 - overloaded mem_read_dyn with runtime capabilities.
