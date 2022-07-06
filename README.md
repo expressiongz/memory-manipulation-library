@@ -52,7 +52,7 @@ small memory manipulation library
 ```
 
 # Code restoration and overwriting features.
-```
+```cpp
 	void set_new_code(std::span<std::uint8_t> _new_code);
 	void restore_code();
 
@@ -63,7 +63,7 @@ small memory manipulation library
 
 # Data restoration and overwriting features
 
-```
+``` cpp
 	void restore_data();
 	void set_data(data_t new_data);
 
