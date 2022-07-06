@@ -2,20 +2,14 @@
 small memory manipulation library
 # Primary features (6/07/2022)
 ```cpp
-     template<typename...var_arg>
-    void dbg_log(std::string const& dbg_message, var_arg...fmt_args) const;
-
-    template<typename... var_arg>
-    void dbg_err(std::string const& dbg_error, var_arg...fmt_args) const;
-
     template<typename stl_container_t>
     stl_container_t mem_read_bytes() const;
 
     template<typename value_t>
-    void mem_set_val(value_t val) const;
+    void mem_set_data(value_t val) const;
 
     template<typename ret_t>
-    ret_t mem_read_val() const;
+    ret_t mem_read_data() const;
 
     template<std::uint32_t sz>
     manipulated_code* mem_tramp_hook(const std::uint32_t func_addr);
@@ -34,12 +28,8 @@ small memory manipulation library
 
     std::vector< std::uint8_t > mem_read_func_bytes() const;
 
-    bool alloc_console();
-    bool free_console();
-
     void reloc_rva(const std::uint32_t mem_address);
     void set_va(const std::uint32_t mem_address);
-
 
     void set_page_flags(const std::size_t sz, DWORD new_page_flags);
 
@@ -48,16 +38,18 @@ small memory manipulation library
     bool mem_set_bytes(const std::size_t szbyte, std::span<std::uint8_t> byte_arr);
     bool mem_set_bytes(const std::size_t szbyte, std::uint8_t byte);
 
-    void unload();
-```
+    void unload_dll();
+ ```
 
 # Code restoration and overwriting features.
 ```cpp
-	void set_new_code(std::span<std::uint8_t> _new_code);
+	void set_new_code(bool overwrite, std::span<std::uint8_t> _new_code);
+	void set_code_restore_buf(std::span<std::uint8_t> _code_restore_buf);
 	void restore_code();
 
 	void overwrite_code();
 	void* ret_address();
+
 
 ```
 
@@ -68,7 +60,7 @@ small memory manipulation library
 	void set_data(data_t new_data);
 
 	data_t read_data() const;
-	data_t* ret_address() const;
+	data_t* ret_data_address() const;
 ```
 
 # TL:DR
@@ -90,4 +82,5 @@ There are a few redundancies in the code that I am aware of, simply do not have 
 - replaced set_rwx and unset_rwx with set_page_flags.
 - library no longer sets page flags in its own functions, that is now up to the user. user can still use set_page_flags before calling functions such as mem_set_bytes
 - mem_tramp_hook now returns a manipulated_code class.
-
+- removed console functions.
+- improved manipulated_code class and manipulated_data class.
