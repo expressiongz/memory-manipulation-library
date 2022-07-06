@@ -9,22 +9,23 @@ class manipulated_code {
 private:
 	DWORD vp_pf{0};
 	void* code_address{nullptr};
-	std::vector<std::uint8_t> old_code{};
+	std::vector<std::uint8_t> code_restore_buf{};
 	std::vector<std::uint8_t> new_code{};
 public:
 
-	void set_new_code(std::span<std::uint8_t> _new_code);
+	void set_new_code(bool overwrite, std::span<std::uint8_t> _new_code);
+	void set_code_restore_buf(std::span<std::uint8_t> _code_restore_buf);
 	void restore_code();
 
 	void overwrite_code();
 	void* ret_address();
 
 
-	explicit manipulated_code(std::span<std::uint8_t> _old_code, std::span<std::uint8_t> _new_code, void* _code_address) 
+	explicit manipulated_code(std::span<std::uint8_t> _code_restore_buf, std::span<std::uint8_t> _new_code, void* _code_address) 
 	{
-		this->old_code.reserve(_old_code.size());
+		this->code_restore_buf.reserve(_code_restore_buf.size());
 
-		std::memcpy(this->old_code.data(), _old_code.data(), _old_code.size());
+		std::memcpy(this->code_restore_buf.data(), _code_restore_buf.data(), _code_restore_buf.size());
 
 		this->new_code.reserve(_new_code.size());
 

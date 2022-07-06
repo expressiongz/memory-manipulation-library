@@ -2,34 +2,9 @@
 #include "manipulated_code.hpp"
 #include "manipulated_values.hpp"
 
-void mem_manip_lib::unload() 
+void mem_manip_lib::unload_dll()
 {
-    free_console();
     FreeLibrary(this->mod_handle);
-}
-
-bool mem_manip_lib::alloc_console()
-{
-    if (this->console_attached) return false;
-
-    this->console_attached = true;
-    std::FILE* fp;
-
-    AllocConsole();
-    freopen_s(&fp, "CONOUT$", "w", stdout);
-
-    SetConsoleTitleA(this->dllname.data());
-
-    return true;
-}
-
-
-bool mem_manip_lib::free_console()
-{
-    if (!this->console_attached) return false;
-    FreeConsole();
-    this->console_attached = false;
-    return true;
 }
 
 

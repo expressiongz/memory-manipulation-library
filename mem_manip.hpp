@@ -20,20 +20,14 @@ private:
 
 public:
 
-    template<typename...var_arg>
-    void dbg_log(std::string const& dbg_message, var_arg...fmt_args) const;
-
-    template<typename... var_arg>
-    void dbg_err(std::string const& dbg_error, var_arg...fmt_args) const;
-
     template<typename stl_container_t>
     stl_container_t mem_read_bytes() const;
 
     template<typename value_t>
-    void mem_set_val(value_t val) const;
+    void mem_set_data(value_t val) const;
 
     template<typename ret_t>
-    ret_t mem_read_val() const;
+    ret_t mem_read_data() const;
 
     template<std::uint32_t sz>
     manipulated_code* mem_tramp_hook(const std::uint32_t func_addr);
@@ -52,12 +46,8 @@ public:
 
     std::vector< std::uint8_t > mem_read_func_bytes() const;
 
-    bool alloc_console();
-    bool free_console();
-
     void reloc_rva(const std::uint32_t mem_address);
     void set_va(const std::uint32_t mem_address);
-
 
     void set_page_flags(const std::size_t sz, DWORD new_page_flags);
 
@@ -66,44 +56,19 @@ public:
     bool mem_set_bytes(const std::size_t szbyte, std::span<std::uint8_t> byte_arr);
     bool mem_set_bytes(const std::size_t szbyte, std::uint8_t byte);
 
-    void unload();
+    void unload_dll();
 
-    explicit mem_manip_lib(HMODULE hmod, const std::string_view dll_name, bool alloc_console_f = false) 
-        : dllname(dll_name), mod_handle(hmod) 
+    explicit mem_manip_lib(HMODULE hmod, const std::string_view dll_name)
+        : dllname(dll_name), mod_handle(hmod)
     {
-        if (alloc_console_f) 
-        {   
-            alloc_console();
-            dbg_log( "\ninitialized %s\n", this->dllname );
-        }
-        else if (GetConsoleWindow()) 
-        {
-            dbg_log("\ninitialized %s\n", this->dllname);
-        }
+
     }
+ 
 };
 
 
-
-template<typename... var_arg>
-void mem_manip_lib::dbg_log(std::string const& dbg_message, var_arg... fmt_args) const 
-{
-    std::string dbg_err_prefix = "[+] ";
-    std::printf((dbg_err_prefix + dbg_message).c_str() , fmt_args...);
-}
-
-
-template<typename... var_arg>
-void mem_manip_lib::dbg_err(std::string const& dbg_message, var_arg... fmt_args) const 
-{
-
-    std::string dbg_err_prefix = "[!] ";
-    std::printf((dbg_err_prefix + dbg_message).c_str() , fmt_args...);
-
-}
-
 template<typename value_t>
-void mem_manip_lib::mem_set_val(value_t val) const
+void mem_manip_lib::mem_set_data(value_t val) const
 {
 
     *static_cast<value_t*>(this->mem_address) = val;
@@ -111,7 +76,7 @@ void mem_manip_lib::mem_set_val(value_t val) const
 }
 
 template<typename ret_t>
-ret_t mem_manip_lib::mem_read_val() const {
+ret_t mem_manip_lib::mem_read_data() const {
 
     return *reinterpret_cast<ret_t*>(this->mem_address);
 
@@ -171,7 +136,7 @@ manipulated_code* mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
 
     std::memset(this->mem_address, 0x90, sz);
     
-    std::memcpy(this->mem_address, new_bytes.data(), 5);
+    std::memcpy(this->mem_address, new_bytes.data(), new_bytes.size());
 
     manipulated_code code_class(old_bytes, new_bytes, this->mem_address);
     return &code_class;
