@@ -2,7 +2,7 @@
 #include "manipulated_code.hpp"
 #include "manipulated_values.hpp"
 
-void mem_manip_lib::unload()
+void mem_manip_lib::unload() 
 {
     free_console();
     FreeLibrary(this->mod_handle);
@@ -51,23 +51,13 @@ std::uint32_t mem_manip_lib::get_rva() const {
     return reinterpret_cast<std::uint32_t>(this->mem_address) - this->base;
 }
 
-void mem_manip_lib::set_rwx(const std::size_t sz)
+void mem_manip_lib::set_page_flags(const std::size_t sz, DWORD new_page_flags)
 {
-    VirtualProtect(this->mem_address, sz, PAGE_EXECUTE_READWRITE, &(this->old_prot));
-}
-
-
-void mem_manip_lib::unset_rwx(const std::size_t sz)
-{
-    VirtualProtect(this->mem_address, sz, this->old_prot, nullptr);
-
-    this->old_prot = 0;
+    VirtualProtect(this->mem_address, sz, new_page_flags, &(this->old_prot));
 }
 
 void mem_manip_lib::mem_set_nop(const std::size_t sz)
 {
-    set_rwx(sz);
-
     std::memset(this->mem_address, 0x90 , sz);
 }
 
@@ -82,17 +72,14 @@ bool mem_manip_lib::mem_set_bytes(const std::size_t instr_sz, std::span<std::uin
     mem_set_nop(instr_sz);
     std::memcpy(this->mem_address, byte_arr.data(), byte_arr.size());
 
-    unset_rwx(instr_sz);
     return true;
 }
 
 
 bool mem_manip_lib::mem_set_bytes(const std::size_t instr_sz, std::uint8_t byte)
 {
-
     mem_set_nop(instr_sz);
     std::memset(this->mem_address, byte, instr_sz);
-    unset_rwx(instr_sz);
     return true;
 }
 

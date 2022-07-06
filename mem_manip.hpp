@@ -36,11 +36,14 @@ public:
     ret_t mem_read_val() const;
 
     template<std::uint32_t sz>
-    manipulated_code mem_tramp_hook(const std::uint32_t func_addr);
+    manipulated_code* mem_tramp_hook(const std::uint32_t func_addr);
 
     template<typename data_t, std::size_t sz>
-    std::array<data_t, sizeof(data_t) * sz> mem_read_dyn();
-    
+    std::array<data_t, sizeof(data_t) * sz> mem_read_dyn() const;
+
+    template<typename data_t>
+    std::vector<data_t> mem_read_dyn(const std::uint32_t sz) const;
+
     std::uint32_t get_va() const;
     std::uint32_t get_rva() const;
 
@@ -56,8 +59,7 @@ public:
     void set_va(const std::uint32_t mem_address);
 
 
-    void set_rwx(const std::size_t sz);
-    void unset_rwx(const std::size_t sz);
+    void set_page_flags(const std::size_t sz, DWORD new_page_flags);
 
     void mem_set_nop(const std::size_t sz);
 
@@ -80,19 +82,8 @@ public:
         }
     }
 };
-    
-template< typename stl_container_t >
-stl_container_t mem_manip_lib::mem_read_bytes() const 
-{
-    auto bytes_read = stl_container_t();
 
-    for ( auto k = 0u; k < bytes_read.size(); ++k )
-    {
-        bytes_read[k] = ( * ( reinterpret_cast< std::uint8_t* >( reinterpret_cast< std::uint32_t >( this->mem_address ) + k) ) );
-    }
 
-    return bytes_read;
-}
 
 template<typename... var_arg>
 void mem_manip_lib::dbg_log(std::string const& dbg_message, var_arg... fmt_args) const 
@@ -111,7 +102,6 @@ void mem_manip_lib::dbg_err(std::string const& dbg_message, var_arg... fmt_args)
 
 }
 
-
 template<typename value_t>
 void mem_manip_lib::mem_set_val(value_t val) const
 {
@@ -128,7 +118,7 @@ ret_t mem_manip_lib::mem_read_val() const {
 }
 
 template<typename data_t, std::size_t sz>
-std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() {
+std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const {
 
     std::array<data_t, sizeof(data_t) * sz> data;
 
@@ -141,11 +131,34 @@ std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() {
     return data;
 }
 
+template<typename data_t>
+std::vector<data_t> mem_manip_lib::mem_read_dyn(const std::uint32_t sz) const {
+    std::vector<data_t> data;
+
+    for (auto idx = 0u; idx < sz; idx += sizeof(data_t)) {
+        data.push_back(*reinterpret_cast<data_t*>(reinterpret_cast<std::uint32_t>(this->mem_address) + idx));
+    }
+
+    return data;
+
+}
+
+template< typename stl_container_t >
+stl_container_t mem_manip_lib::mem_read_bytes() const
+{
+    auto bytes_read = stl_container_t();
+
+    for (auto k = 0u; k < bytes_read.size(); ++k)
+    {
+        bytes_read[k] = (*(reinterpret_cast<std::uint8_t*>(reinterpret_cast<std::uint32_t>(this->mem_address) + k)));
+    }
+
+    return bytes_read;
+}
 
 template<std::uint32_t sz>
-manipulated_code mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
+manipulated_code* mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
 {
-
     constexpr auto jmp_instr_size = 5;
 
     if (sz < jmp_instr_size)
@@ -153,25 +166,13 @@ manipulated_code mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
         return nullptr;
     }
 
+    const auto old_bytes = mem_read_bytes<std::array<std::uint8_t>>();
+    const auto new_bytes = std::to_array<std::uint8_t>({0xE9, (new_func & 0xFF000000), (new_func & 0xFF0000), (new_func & 0xFF00), (new_func & 0xFF)});
 
-    const auto old_bytes = mem_read_bytes<std::array<std::uint8_t, sz>>();
-    auto new_bytes = std::to_array<std::uint8_t>({ 0xE9, 0x00, 0x00, 0x00, 0x00 });
-
-    *reinterpret_cast<std::uint32_t*>(new_bytes[1]) = new_func;
-    
-    set_rwx(sz);
     std::memset(this->mem_address, 0x90, sz);
-
-    const auto rel_addr = (new_func - reinterpret_cast<std::uint32_t>(this->mem_address)) - jmp_instr_size;
-
-
-    *(static_cast<std::uint8_t*>(this->mem_address)) = 0xE9;
-    *(reinterpret_cast<std::uint32_t*>(reinterpret_cast<std::uint32_t>(this->mem_address) + 1)) = rel_addr;
-
-    unset_rwx(sz);
+    
+    std::memcpy(this->mem_address, new_bytes.data(), 5);
 
     manipulated_code code_class(old_bytes, new_bytes, this->mem_address);
-    return code_class;
+    return &code_class;
 }
-
-
