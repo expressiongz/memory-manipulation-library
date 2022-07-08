@@ -13,22 +13,30 @@ void mem_manip_lib::reloc_rva(const std::uint32_t address)
     this->mem_address = reinterpret_cast< void* >(this->base + address);
 }
 
-void mem_manip_lib::set_va(const std::uint32_t address) {
+void mem_manip_lib::set_va(const std::uint32_t address) 
+{
     this->mem_address = reinterpret_cast<void*>(address);
 }
 
 
-std::uint32_t mem_manip_lib::get_va() const {
+std::uint32_t mem_manip_lib::get_va() const 
+{
     return reinterpret_cast<std::uint32_t>(this->mem_address);
 }
 
-std::uint32_t mem_manip_lib::get_rva() const {
+std::uint32_t mem_manip_lib::get_rva() const 
+{
     return reinterpret_cast<std::uint32_t>(this->mem_address) - this->base;
 }
 
 void mem_manip_lib::set_page_flags(const std::size_t sz, DWORD new_page_flags)
 {
     VirtualProtect(this->mem_address, sz, new_page_flags, &(this->old_prot));
+}
+
+void mem_manip_lib::restore_page_flags(const std::size_t sz)
+{
+    VirtualProtect(this->mem_address, sz, this->old_prot, &(this->old_prot));
 }
 
 void mem_manip_lib::mem_set_nop(const std::size_t sz)

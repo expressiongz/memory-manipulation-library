@@ -6,7 +6,7 @@
 void main_thread(HMODULE mod_handle, const std::string_view dll_name) 
 {
 	mem_manip_lib memory_lib(mod_handle, dll_name);
-	memory_lib.unload();
+	memory_lib.unload_dll();
 }
 
 bool __stdcall DllMain(HMODULE mod_handle, std::uint32_t reason , void*)

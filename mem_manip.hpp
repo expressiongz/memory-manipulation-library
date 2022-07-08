@@ -50,6 +50,7 @@ public:
     void set_va(const std::uint32_t mem_address);
 
     void set_page_flags(const std::size_t sz, DWORD new_page_flags);
+    void restore_page_flags(const std::size_t sz);
 
     void mem_set_nop(const std::size_t sz);
 
@@ -70,20 +71,20 @@ public:
 template<typename value_t>
 void mem_manip_lib::mem_set_data(value_t val) const
 {
-
     *static_cast<value_t*>(this->mem_address) = val;
-
 }
 
 template<typename ret_t>
-ret_t mem_manip_lib::mem_read_data() const {
+ret_t mem_manip_lib::mem_read_data() const 
+{
 
     return *reinterpret_cast<ret_t*>(this->mem_address);
 
 }
 
 template<typename data_t, std::size_t sz>
-std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const {
+std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const 
+{
 
     std::array<data_t, sizeof(data_t) * sz> data;
 
@@ -97,7 +98,8 @@ std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const {
 }
 
 template<typename data_t>
-std::vector<data_t> mem_manip_lib::mem_read_dyn(const std::uint32_t sz) const {
+std::vector<data_t> mem_manip_lib::mem_read_dyn(const std::uint32_t sz) const 
+{
     std::vector<data_t> data;
 
     for (auto idx = 0u; idx < sz; idx += sizeof(data_t)) {
@@ -131,13 +133,16 @@ manipulated_code* mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
         return nullptr;
     }
 
-    const auto old_bytes = mem_read_bytes<std::array<std::uint8_t>>();
-    const auto new_bytes = std::to_array<std::uint8_t>({0xE9, (new_func & 0xFF000000), (new_func & 0xFF0000), (new_func & 0xFF00), (new_func & 0xFF)});
+    const auto overwritten_bytes = mem_read_bytes<std::array<std::uint8_t, sz>>();
+    const auto new_bytes = std::to_array<std::uint8_t>({0xE9, 0x00, 0x00, 0x00, 0x00});
+
+    const auto rel_addr = (new_func - reinterpret_cast<std::uint32_t>(this->mem_address)) - jmp_instr_size;
+
+    *reinterpret_cast<std::uint32_t*>(new_bytes[1]) = rel_addr;
 
     std::memset(this->mem_address, 0x90, sz);
-    
     std::memcpy(this->mem_address, new_bytes.data(), new_bytes.size());
 
-    manipulated_code code_class(old_bytes, new_bytes, this->mem_address);
+    manipulated_code code_class(overwritten_bytes, new_bytes, this->mem_address);
     return &code_class;
 }
