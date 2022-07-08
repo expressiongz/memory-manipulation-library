@@ -1,6 +1,6 @@
 # memory-manip-lib
 small memory manipulation library
-# Primary features (6/07/2022)
+# Primary features (07/07/2022)
 ```cpp
      template<typename stl_container_t>
     stl_container_t mem_read_bytes() const;
