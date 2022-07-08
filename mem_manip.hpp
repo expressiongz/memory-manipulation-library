@@ -37,7 +37,7 @@ public:
 
     template<typename data_t>
     std::vector<data_t> mem_read_dyn(const std::uint32_t sz) const;
-
+    
     std::uint32_t get_va() const;
     std::uint32_t get_rva() const;
 
@@ -55,7 +55,7 @@ public:
     void mem_set_nop(const std::size_t sz);
 
     bool mem_set_bytes(const std::size_t szbyte, std::span<std::uint8_t> byte_arr);
-    bool mem_set_bytes(const std::size_t szbyte, std::uint8_t byte);
+    bool mem_set_byte(const std::size_t szbyte, std::uint8_t byte);
 
     void unload_dll();
 
@@ -133,15 +133,14 @@ manipulated_code* mem_manip_lib::mem_tramp_hook(const std::uint32_t new_func)
         return nullptr;
     }
 
-    const auto overwritten_bytes = mem_read_bytes<std::array<std::uint8_t, sz>>();
-    const auto new_bytes = std::to_array<std::uint8_t>({0xE9, 0x00, 0x00, 0x00, 0x00});
-
     const auto rel_addr = (new_func - reinterpret_cast<std::uint32_t>(this->mem_address)) - jmp_instr_size;
+    auto overwritten_bytes = mem_read_bytes<std::array<std::uint8_t, sz>>();
 
-    *reinterpret_cast<std::uint32_t*>(new_bytes[1]) = rel_addr;
-
-    std::memset(this->mem_address, 0x90, sz);
-    std::memcpy(this->mem_address, new_bytes.data(), new_bytes.size());
+    std::uint8_t new_bytes[] = {0xE9, 0x00, 0x00, 0x00, 0x00}; 
+    *reinterpret_cast<std::uint32_t*>(&new_bytes[1]) = rel_addr;
+    
+    mem_set_nop(sz);
+    mem_set_bytes(sz, new_bytes);
 
     manipulated_code code_class(overwritten_bytes, new_bytes, this->mem_address);
     return &code_class;

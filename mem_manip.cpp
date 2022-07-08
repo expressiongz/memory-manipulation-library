@@ -59,7 +59,7 @@ bool mem_manip_lib::mem_set_bytes(const std::size_t instr_sz, std::span<std::uin
 }
 
 
-bool mem_manip_lib::mem_set_bytes(const std::size_t instr_sz, std::uint8_t byte)
+bool mem_manip_lib::mem_set_byte(const std::size_t instr_sz, std::uint8_t byte)
 {
     mem_set_nop(instr_sz);
     std::memset(this->mem_address, byte, instr_sz);
