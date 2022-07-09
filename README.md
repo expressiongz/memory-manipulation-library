@@ -87,5 +87,6 @@ small memory manipulation library
 	array_data_t* ret_array_address() const;
 ```
 # update (09/07/2022)
-- updated stuff in general too lazy to write patch notes
-- fixed bugs and discrepancies left over from 3am programming...
+- implemented structured memory editing blocks
+- renamed a few things
+- added manipulated_array_data
