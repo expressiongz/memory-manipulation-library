@@ -10,6 +10,7 @@ class manipulated_code
 private:
 	DWORD vp_pf{0};
 	void* code_address{nullptr};
+	bool failed{ false };
 	std::vector<std::uint8_t> overwritten_code{};
 	std::vector<std::uint8_t> new_code{};
 public:
@@ -22,7 +23,7 @@ public:
 	void* ret_address();
 
 
-	explicit manipulated_code(std::span<std::uint8_t> _overwritten_code, std::span<std::uint8_t> _new_code, void* _code_address) 
+	explicit manipulated_code(std::span<std::uint8_t> _overwritten_code, std::span<std::uint8_t> _new_code, void* _code_address)
 	{
 		this->overwritten_code.reserve(_overwritten_code.size());
 
@@ -32,6 +33,10 @@ public:
 
 		std::memcpy(this->new_code.data(), _new_code.data(), _new_code.size());
 
+	}
+
+	explicit manipulated_code() {
+		this->failed = true;
 	}
 
 };
