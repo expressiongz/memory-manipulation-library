@@ -1,6 +1,6 @@
 # memory-manip-lib
 small memory manipulation library
-# Primary features (09/07/2022)
+# Primary features (10/07/2022)
 ```cpp
     template<std::size_t sz>
     manipulated_code mem_tramp_hook(const std::uint32_t func_addr) const;
@@ -60,6 +60,7 @@ small memory manipulation library
 	void* ret_address();
 
 
+
 ```
 
 # Data restoration and overwriting features
@@ -74,6 +75,7 @@ small memory manipulation library
 ```
 ## manipulated_array_data
 ```cpp
+
 	void set_overwritten_array(std::span<array_data_t> array);
 	void set_new_array(std::span<array_data_t> array);
 	void set_array_index(const std::uint32_t index, array_data_t value) const;
@@ -86,7 +88,7 @@ small memory manipulation library
 
 	array_data_t* ret_array_address() const;
 ```
-# update (09/07/2022)
+# update (10/07/2022)
 - implemented structured memory editing blocks
 - renamed a few things
 - added manipulated_array_data
