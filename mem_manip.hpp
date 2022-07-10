@@ -10,7 +10,7 @@ class mem_manip_lib
 private:
         
     std::uint32_t base{ reinterpret_cast<std::uint32_t>(GetModuleHandleA(nullptr)) };
-    const std::string_view dllname{ nullptr };
+    const std::string_view dllname { nullptr };
 
     void* memory_address{ nullptr };
     bool console_attached{ false };
@@ -76,7 +76,7 @@ public:
 template<typename ret_t>
 ret_t mem_manip_lib::mem_read_data() const
 {
-    return *reinterpret_cast<ret_t*>(this->memory_address);
+    return *static_cast<ret_t*>(this->memory_address);
 }
 
 template<typename value_t>
@@ -151,7 +151,6 @@ manipulated_code mem_manip_lib::mem_set_nop() const
 template<std::size_t sz>
 manipulated_code mem_manip_lib::mem_set_bytes(std::span<std::uint8_t> bytes) const
 {
-
     if (bytes.size() > sz)
     {
         return manipulated_code();

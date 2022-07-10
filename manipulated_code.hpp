@@ -25,7 +25,6 @@ public:
 
 	explicit manipulated_code(std::span<std::uint8_t> _overwritten_code, std::span<std::uint8_t> _new_code, void* _code_address) : code_address(_code_address)
 	{
-		
 		this->overwritten_code.reserve(_overwritten_code.size());
 
 		std::memcpy(this->overwritten_code.data(), _overwritten_code.data(), _overwritten_code.size());
@@ -37,7 +36,7 @@ public:
 	}
 
 	explicit manipulated_code() : failed(true) {
-		
+
 	}
 
 };
