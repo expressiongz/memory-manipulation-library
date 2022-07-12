@@ -49,7 +49,7 @@ std::uint8_t mem_manip_lib::mem_read_byte(bool signedness) const
 
 std::string mem_manip_lib::mem_read_string(const std::size_t string_sz) const 
 {
-    auto read_string = std::string();
+    std::string read_string{};
     for (auto idx = 0u; idx < string_sz; idx++) 
     {
         read_string.push_back(static_cast<std::uint8_t*>(this->memory_address)[idx]);

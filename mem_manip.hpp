@@ -8,7 +8,6 @@
 class mem_manip_lib
 {
 private:
-        
     std::uint32_t base{ reinterpret_cast<std::uint32_t>(GetModuleHandleA(nullptr)) };
     const std::string_view dllname { nullptr };
 
@@ -19,7 +18,6 @@ private:
     DWORD vp_old_protection{ 0 };
 
 public:
-
     template<std::size_t sz>
     manipulated_code mem_tramp_hook(const std::uint32_t func_addr) const;
 
@@ -66,6 +64,9 @@ public:
     void unload_dll() const;
 
 
+
+
+
     explicit mem_manip_lib(HMODULE hmod, const std::string_view dll_name)
         : dllname(dll_name), lib_module_handle(hmod)
     {
@@ -94,7 +95,7 @@ template<typename data_t, std::size_t sz>
 std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const 
 {
 
-    std::array<data_t, sizeof(data_t) * sz> data;
+    std::array<data_t, sizeof(data_t) * sz> data{};
 
     for (auto idx = 0u; idx < sizeof(data_t) * sz; idx++) {
 
@@ -107,7 +108,7 @@ std::array<data_t, sizeof(data_t) * sz> mem_manip_lib::mem_read_dyn() const
 template<typename data_t>
 std::vector<data_t> mem_manip_lib::mem_read_dyn(const std::size_t sz) const 
 {
-    std::vector<data_t> data;
+    std::vector<data_t> data{};
 
     for (auto idx = 0u; idx < sz; idx++) {
         data.push_back(static_cast<data_t*>(this->memory_address)[idx]);
@@ -125,7 +126,7 @@ manipulated_array_data<value_t, sz> mem_manip_lib::mem_set_dyn(value_t val) cons
         static_cast<value_t*>(this->memory_address)[idx] = val;
     }
     
-    const auto new_array = mem_read_dyn<value_t, sz>();
+    const auto new_array = mem_read_dyn<value_t, sz>(); 
 
     return manipulated_array_data<value_t, sz>(read_array, new_array, this->memory_address);
 }

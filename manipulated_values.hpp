@@ -121,7 +121,8 @@ template<typename array_data_t, std::size_t array_sz>
 void manipulated_array_data<array_data_t, array_sz>::restore_array() const
 {
 	// overwriting method for now. later updates will feature std::array methods to overwrite the array.
-	for (auto idx = 0u; idx < array_sz; idx++) {
+	for (auto idx = 0u; idx < array_sz; idx++) 
+	{
 		this->array_address[idx] = this->overwritten_array[idx];
 	}
 }
