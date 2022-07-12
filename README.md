@@ -88,7 +88,16 @@ small memory manipulation library
 
 	array_data_t* ret_array_address() const;
 ```
-# update (10/07/2022)
-- implemented structured memory editing blocks
-- renamed a few things
-- added manipulated_array_data
+
+## exception_handler
+```
+	static void change_hooked_address(void* new_hooked_address_);
+	static void change_hook_to_address(void* new_hook_to_address_);
+
+	void start_handler(void* hooked_address_, void* hook_to_address_, bool breakpoint);
+	void remove_handler() const;
+```
+
+# update (12/07/2022)
+- added exception handler hooking.
+- minor changes.
