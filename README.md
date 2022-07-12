@@ -90,7 +90,7 @@ small memory manipulation library
 ```
 
 ## exception_handler
-```
+```cpp
 	static void change_hooked_address(void* new_hooked_address_);
 	static void change_hook_to_address(void* new_hook_to_address_);
 
