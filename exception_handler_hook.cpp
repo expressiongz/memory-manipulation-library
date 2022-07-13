@@ -27,7 +27,7 @@ long __stdcall handler(EXCEPTION_POINTERS* exception)
 	{
 		DWORD vp_old_protection{ 0 };
 
-		VirtualProtect(reinterpret_cast<void*>(hooked_address_), 1, PAGE_GUARD, &vp_old_protection);
+		VirtualProtect(reinterpret_cast<void*>(hooked_address_), 1, PAGE_EXECUTE_READ | PAGE_GUARD, &vp_old_protection);
 
 		exception->ContextRecord->XIP = hook_to_address_;
 		return EXCEPTION_CONTINUE_EXECUTION;
@@ -57,7 +57,7 @@ void exception_handler::start_handler(void* hooked_address, void* hook_to_addres
 		return;
 	}
 
-	VirtualProtect(hooked_address, 1, PAGE_GUARD, &vp_old_protection);
+	VirtualProtect(hooked_address, 1, PAGE_EXECUTE_READ | PAGE_GUARD, &vp_old_protection);
 }
 
 void exception_handler::remove_handler() const
