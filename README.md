@@ -64,7 +64,7 @@ small memory manipulation library
 ```
 
 # Data restoration and overwriting features
-## manipulated_data
+## manipulated data
 ``` cpp
 	void restore_data();
 	void set_data(data_t new_data);
@@ -73,7 +73,7 @@ small memory manipulation library
 	data_t* ret_data_address() const;
 	
 ```
-## manipulated_array_data
+## manipulated array data
 ```cpp
 
 	void set_overwritten_array(std::span<array_data_t> array);
@@ -89,7 +89,7 @@ small memory manipulation library
 	array_data_t* ret_array_address() const;
 ```
 
-## exception_handler
+## vectored exception handler
 ```cpp
 	static void change_hooked_address(void* new_hooked_address_);
 	static void change_hook_to_address(void* new_hook_to_address_);
