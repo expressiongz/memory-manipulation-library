@@ -98,9 +98,8 @@ small memory manipulation library
 	void remove_handler() const;
 ```
 
-# update (12/07/2022)
-- added exception handler hooking.
-- minor changes.
+# update (15/07/2022)
+- Inlined functions that should have been inlined.
 
 # future updates:
 - overloading certain templated functions. some functions require templates because they construct a manipulated memory class. will happen soon.
