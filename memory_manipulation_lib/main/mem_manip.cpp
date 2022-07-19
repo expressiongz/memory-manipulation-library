@@ -20,6 +20,6 @@ std::vector<std::uint8_t> mem_manip_lib::mem_read_func_bytes() const
         bytes_read.push_back(*curr_byte);
         curr_byte += 1;
 
-    } while (*(curr_byte + 1) != 0xCC || *(curr_byte + 2) != 0xCC || *(curr_byte + 3) != 0xCC);
+    } while (*curr_byte != 0xC3);
     return bytes_read;
 }
