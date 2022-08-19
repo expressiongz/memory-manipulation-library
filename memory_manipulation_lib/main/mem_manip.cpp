@@ -13,13 +13,43 @@ std::string mem_manip_lib::mem_read_string(const std::size_t string_sz) const
 
 std::vector<std::uint8_t> mem_manip_lib::mem_read_func_bytes() const 
 {
-    auto bytes_read = std::vector< std::uint8_t >();
-    auto const* curr_byte = static_cast<std::uint8_t*>(this->memory_address);
-    do 
-    {
-        bytes_read.push_back(*curr_byte);
-        curr_byte += 1;
+	auto byte = static_cast< std::uint8_t* >( address );
+	std::vector< std::uint8_t > function_bytes{ };
 
-    } while (*(curr_byte + 1) != 0xCC || *(curr_byte + 2) != 0xCC || *(curr_byte + 3) != 0xCC);
-    return bytes_read;
+	static const std::unordered_map< std::uint8_t, std::uint8_t > ret_bytes_map
+	{
+		{
+			0xC2,
+			0x03
+		},
+		{
+			0xC3,
+			0x01
+		}
+	};
+
+	static const auto alignment_bytes = std::to_array< std::uint8_t >
+	( 
+		{ 0xCC, 0x90 } 
+	);
+
+	while( true )
+	{
+		function_bytes.push_back( *byte );
+
+		for( const auto& ret_byte : ret_bytes_map )
+		{
+			const auto& [ opcode, opcode_sz ] = ret_byte;
+			if( *byte == opcode )
+			{
+				for( const auto& alignment_byte : alignment_bytes )
+				{
+					if( *( byte + opcode_sz ) == alignment_byte )
+						return function_bytes;
+				}
+			}
+			
+		}
+		++byte;
+	}
 }
